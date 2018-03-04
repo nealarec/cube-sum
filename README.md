@@ -1,5 +1,4 @@
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/Nealarec/cube-sum.png?columns=all)](https://waffle.io/Nealarec/cube-sum?utm_source=badge)
-
 [![Build Status](https://travis-ci.org/Nealarec/cube-sum.svg?branch=master)](https://travis-ci.org/Nealarec/cube-sum)
 
 ## React Create App
