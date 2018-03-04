@@ -2,64 +2,64 @@ import Matrix3D from '../app/classes/Matrix3D'
 
 
 it('Matrix3D.subMatrix will be a function', function () {
-    let my_matrix = new Matrix3D;
+    let my_matrix = new Matrix3D
 
-    expect(typeof my_matrix.subMatrix).toBe('function');
-});
+    expect(typeof my_matrix.subMatrix).toBe('function')
+})
 
 it('Matrix3D.subMatrix(1,1,1,1,1,1) before make will be false', function () {
-    let my_matrix = new Matrix3D;
+    let my_matrix = new Matrix3D
 
-    expect(my_matrix.subMatrix(1, 1, 1, 1, 1, 1)).toBe(false);
-});
+    expect(my_matrix.subMatrix(1, 1, 1, 1, 1, 1)).toBe(false)
+})
 
 it('Matrix3D.subMatrix(1,1,1,1,1,1) after make(2) will be [[[0]]] ', function () {
-    let my_matrix = new Matrix3D;
+    let my_matrix = new Matrix3D
     my_matrix.make(2)
     let res = my_matrix.subMatrix(1, 1, 1, 1, 1, 1)
 
-    expect(JSON.stringify(res)).toBe(JSON.stringify([[[0]]]));
-});
+    expect(JSON.stringify(res)).toBe(JSON.stringify([[[0]]]))
+})
 
 it('Matrix3D.subMatrix(1,1,1,3,1,1) after make(2) will be false', function () {
-    let my_matrix = new Matrix3D;
+    let my_matrix = new Matrix3D
     my_matrix.make(2)
     let res = my_matrix.subMatrix(1, 1, 1, 3, 1, 1)
 
-    expect(res).toBe(false);
-});
+    expect(res).toBe(false)
+})
 
 it('Matrix3D.subMatrix(1,0,1,1,1,1) after make(2) will be false', function () {
-    let my_matrix = new Matrix3D;
+    let my_matrix = new Matrix3D
     my_matrix.make(2)
     let res = my_matrix.subMatrix(1, 0, 1, 1, 1, 1)
 
-    expect(res).toBe(false);
-});
+    expect(res).toBe(false)
+})
 
 it('Matrix3D.subMatrix(1,2,1,1,1,1) after make(2) will be false', function () {
-    let my_matrix = new Matrix3D;
+    let my_matrix = new Matrix3D
     my_matrix.make(2)
     let res = my_matrix.subMatrix(1, 2, 1, 1, 1, 1)
 
-    expect(res).toBe(false);
-});
+    expect(res).toBe(false)
+})
 
 it('Matrix3D.subMatrix(2,1,1,1,1,1) after make(2) will be false', function () {
-    let my_matrix = new Matrix3D;
+    let my_matrix = new Matrix3D
     my_matrix.make(2)
     let res = my_matrix.subMatrix(2, 1, 1, 1, 1, 1)
 
-    expect(res).toBe(false);
-});
+    expect(res).toBe(false)
+})
 
 it('Matrix3D.subMatrix(1,1,2,1,1,1) after make(2) will be false', function () {
-    let my_matrix = new Matrix3D;
+    let my_matrix = new Matrix3D
     my_matrix.make(2)
     let res = my_matrix.subMatrix(1, 1, 2, 1, 1, 1)
 
-    expect(res).toBe(false);
-});
+    expect(res).toBe(false)
+})
 
 it('Matrix3D.subMatrix(1,1,1,2,1,1) after make(3) will be (2*1*1) matrix with 0', function () {
     let my_matrix = new Matrix3D
@@ -109,10 +109,10 @@ it('Matrix3D.subMatrix(1,1,1,2,2,2) after make(3) and set(1,1,3,5) will be (2*2*
     ]))
 })
 
-it('Matrix3D.subMatrix(1,1,1,2,2,3) after make(3) and set(0,0,2,5) will be (2*2*3) matrix with 0 and 5 in (1,1,3)', function () {
+it('Matrix3D.subMatrix(1,1,1,2,2,3) after make(3) and set(1,1,3,5) will be (2*2*3) matrix with 0 and 5 in (1,1,3)', function () {
     let my_matrix = new Matrix3D
     my_matrix.make(3)
-    my_matrix.set(0, 0, 2, 5)
+    my_matrix.set(1, 1, 3, 5)
 
     let res = my_matrix.subMatrix(1, 1, 1, 2, 2, 3)
 
