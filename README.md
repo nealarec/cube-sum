@@ -1,3 +1,4 @@
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/Nealarec/cube-sum.png?columns=all)](https://waffle.io/Nealarec/cube-sum?utm_source=badge)
 ## React Create App
 
 Este proyecto fue creado con [Create React App](https://github.com/facebookincubator/create-react-app)
