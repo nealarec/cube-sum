@@ -57,7 +57,7 @@ export default class Matrix3D {
     }
 
     /**
-     * Return 3D matrix between p1(x,y,z) and p2(x,y,z)
+     * Return 3D matrix between p1(x,y,z) and p2(x,y,z) inclusive
      * 
      * @param {integer} x1 p1 x coordinate
      * @param {integer} y1 p1 y coordinate
@@ -81,20 +81,39 @@ export default class Matrix3D {
          * this because the Matrix3D.matrix object is a array matrix 
          * and all in it began on 0
          */
+
         args = args.map(n => n - 1)
 
         let base_x = args[0]
         let base_y = args[1]
         let base_z = args[2]
 
-        let take_x = args[3] - base_x + 1
-        let take_y = args[4] - base_y + 1
-        let take_z = args[5] - base_z + 1
+        let take_x = args[3] + 1
+        let take_y = args[4] + 1
+        let take_z = args[5] + 1
 
         return this.matrix.slice(base_x, take_x).map(y_obj =>
             y_obj.slice(base_y, take_y).map(z_obj =>
                 z_obj.slice(base_z, take_z)
             )
         )
+    }
+    
+    /**
+     * Return sum of elements between p1(x,y,z) and p2(x,y,z) inclusive
+     * 
+     * @param {integer} x1 p1 x coordinate
+     * @param {integer} y1 p1 y coordinate
+     * @param {integer} z1 p1 z coordinate
+     * @param {integer} x2 p2 x coordinate
+     * @param {integer} y2 p2 y coordinate
+     * @param {integer} z3 p3 z coordinate
+     */
+    sum(...args) {
+        return this.subMatrix(...args).reduce((sum, y_obj) =>
+            sum + y_obj.reduce((sum, z_obj) =>
+                sum + z_obj.reduce((sum, value) => sum + value, 0)
+                , 0)
+            , 0)
     }
 }
