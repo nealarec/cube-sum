@@ -5,6 +5,7 @@ export default class Matrix3D {
 
     /**
      * Create a matrix of n*n*n and store it on matrix property
+     * 
      * @param {number} n determinate the matrix length
      */
     make(n) {
@@ -15,6 +16,13 @@ export default class Matrix3D {
         )
     }
 
+    /**
+     * Return the value of 3D element on matrix
+     * 
+     * @param {integer} x x coordinate
+     * @param {integer} y y coordinate
+     * @param {integer} z z coordinate
+     */
     get(x, y, z) {
         let x_obj = this.matrix[x] ? this.matrix[x] : []
         let y_obj = x_obj[y] ? x_obj[y] : [];
@@ -23,6 +31,14 @@ export default class Matrix3D {
         return value;
     }
 
+    /**
+    * Change the value of 3D object on the matrix
+    * 
+    * @param {integer} x x coordinate
+    * @param {integer} y y coordinate
+    * @param {integer} z z coordinate
+    * @param {integer} W value to assign
+    */
     set(x, y, z, W) {
         if (this.get(x, y, z) !== undefined) {
             this.matrix = $.extend(true, [], this.matrix)
