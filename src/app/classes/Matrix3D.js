@@ -12,4 +12,12 @@ export default class Matrix3D {
             )
         )
     }
+
+    get(x, y, z) {
+        let x_obj = this.matrix[x] ? this.matrix[x] : []
+        let y_obj = x_obj[y] ? x_obj[y] : [];
+        let value = y_obj[z];
+
+        return value;
+    }
 }
