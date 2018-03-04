@@ -1,3 +1,5 @@
+import $ from 'jquery'
+
 export default class Matrix3D {
     matrix = []
 
@@ -19,5 +21,15 @@ export default class Matrix3D {
         let value = y_obj[z];
 
         return value;
+    }
+
+    set(x, y, z, W) {
+        if (this.get(x, y, z) !== undefined) {
+            this.matrix = $.extend(true, [], this.matrix)
+            this.matrix[x][y][z] = W;
+            return true;
+        }
+
+        return false;
     }
 }
