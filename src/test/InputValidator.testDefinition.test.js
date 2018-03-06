@@ -18,9 +18,6 @@ it("testDefinition('3 3') will be true", function () {
     let validator = new InputValidator;
 
     expect(validator.testDefinition('3 3')).toBe(true)
-    expect(validator.matrix_length).toBe(3)
-    expect(validator.operation_length).toBe(3)
-    expect(validator.operation_count).toBe(0)
 })
 
 it("testDefinition('-3 4') will be false", function () {
