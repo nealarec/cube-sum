@@ -14,6 +14,13 @@ it('sum(1,1,1,2,2,2) after make(2) will be 0', function () {
     expect(my_matrix.sum(1, 1, 1, 2, 2, 2)).toBe(0)
 })
 
+it('sum(1,1,1,2,3,2) after make(2) will be false', function () {
+    let my_matrix = new Matrix3D
+    my_matrix.make(2)
+
+    expect(my_matrix.sum(1, 1, 1, 2, 3, 2)).toBe(false)
+})
+
 it('sum(1,1,1,2,2,2) after make(2) and set(1,2,1,7) will be 7', function () {
     let my_matrix = new Matrix3D
     my_matrix.make(2)

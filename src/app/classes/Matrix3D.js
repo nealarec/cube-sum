@@ -110,10 +110,16 @@ export default class Matrix3D {
      * @param {integer} z3 p3 z coordinate
      */
     sum(...args) {
-        return this.subMatrix(...args).reduce((sum, y_obj) =>
-            sum + y_obj.reduce((sum, z_obj) =>
-                sum + z_obj.reduce((sum, value) => sum + value, 0)
+        let subMatrix = this.subMatrix(...args)
+        
+        if(subMatrix) {
+            return subMatrix.reduce((sum, y_obj) =>
+                sum + y_obj.reduce((sum, z_obj) =>
+                    sum + z_obj.reduce((sum, value) => sum + value, 0)
+                    , 0)
                 , 0)
-            , 0)
+        }
+
+        return false
     }
 }
