@@ -19,16 +19,22 @@ export const messages = {
     QUERY_X1_GREATER_THAN_X2: 'x1 no debe ser menor que x2',
     QUERY_Y1_GREATER_THAN_Y2: 'y1 no debe ser menor que y2',
     QUERY_Z1_GREATER_THAN_Z2: 'z1 no debe ser menor que z2',
+
+    TEST_CASE_SUGGESTION: 'T // ej: 2',
+    DEFINITION_SUGGESTION: 'N M // ej: 3 5',
+    OPERATION_SUGGESTION: 'UPDATE x y z W | QUERY x1 y1 z1 x2 y2 z2 // ej: UPDATE 1 1 1 5 | QUERY 1 1 1 2 2 2',
 }
 
 export default class InputValidator {
 
     input = ''
     error = {}
+    test_case = 0
     suggestion = ''
     matrix_length = 0
     operation_length = 0
     operation_count = 0
+    operations = []
 
     setInput(txt) {
         this.input = txt;
@@ -39,13 +45,77 @@ export default class InputValidator {
 
         if (input === '') {
             this.error = {};
-            this.suggestion = '{1 - 50} T: test case'
+            this.suggestion = messages.TEST_CASE_SUGGESTION
             return true
         }
 
+        this.reset();
+
         input = input.split(/\n/);
-        if (!this.testTestCase(input[0], 0)) {
-            return false;
+
+        for (let i in input) {
+            let line = input[i].trim()
+
+            if (!this.test_case) {
+                if (this.testTestCase(line, i)) {
+                    this.suggestion = messages.DEFINITION_SUGGESTION
+                } else {
+                    return false
+                }
+
+            } else if (this.operation_length == 0) {
+                if (this.testDefinition(line, i)) {
+                    this.processDefinition(line)
+                } else {
+                    return false
+                }
+            } else if (this.operation_length > this.operation_count) {
+                if (this.testOperation(line, i)) {
+                    this.processOperation(line)
+                } else {
+                    return false
+                }
+            } else {
+                if (this.testDefinition(line, i)) {
+                    this.processDefinition(line)
+                } else {
+                    return false
+                }
+            }
+        }
+
+        return true;
+    }
+
+    reset() {
+        this.error = {}
+        this.suggestion = ''
+        this.test_case = 0
+        this.matrix_length = 0
+        this.operation_length = 0
+        this.operation_count = 0
+        this.operations = []
+    }
+
+    processDefinition(line) {
+        line = line.split(/\s/)
+
+        this.operations.push(`MAKE ${line[0]}`);
+
+        this.suggestion = messages.OPERATION_SUGGESTION
+        this.matrix_length = Number(line[0])
+        this.operation_length = Number(line[1])
+        this.operation_count = 0
+    }
+
+    processOperation(line) {
+        this.operation_count++
+        this.operations.push(line)
+
+        if (this.operation_length === this.operation_count) {
+            this.suggestion = messages.DEFINITION_SUGGESTION
+        } else {
+            this.suggestion = messages.OPERATION_SUGGESTION
         }
     }
 
@@ -86,10 +156,6 @@ export default class InputValidator {
             return false
         }
 
-        this.matrix_length = m
-        this.operation_length = n
-        this.operation_count = 0
-
         return true
     }
 
@@ -98,78 +164,87 @@ export default class InputValidator {
             this.error = { line, line_number, error: messages.OPERATION_BAD_START }
             return false
         }
-        
-        if(this.matrix_length === 0) {
+
+        if (this.matrix_length === 0) {
             this.error = { line, line_number, error: messages.NOT_MATRIX_LENGTH }
             return false
         }
 
         if (/^UPDATE/.test(line)) {
-            if (!/^UPDATE\s(-?[0-9]+\s){3}-?[0-9]+/.test(line)) {
-                this.error = { line, line_number, error: messages.UPDATE_NOT_NUMBERS }
-                return false
-            }
-
-            let register = line.split(/\s/)
-            let x = Number(register[1])
-            let y = Number(register[2])
-            let z = Number(register[3])
-            let W = Number(register[4])
-
-            if ((x < 1 || x > this.matrix_length)
-                || (y < 1 || y > this.matrix_length)
-                || (z < 1 || z > this.matrix_length)) {
-
-                this.error = { line, line_number, error: messages.UPDATE_OUT_BOUNDS }
-                return false
-            }
-
-            if (W < Math.pow(-10, 9) || W > Math.pow(10, 9)) {
-                this.error = { line, line_number, error: messages.UPDATE_W_OUT_BOUNDS }
-                return false
-            }
+            return this.testUpdate(line, line_number)
         }
 
         if (/^QUERY/.test(line)) {
-            if (!/^QUERY\s(-?[0-9]+\s){5}[0-9]+/.test(line)) {
-                this.error = { line, line_number, error: messages.QUERY_NOT_NUMBERS }
-                return false
-            }
+            return this.testQuery(line, line_number)
+        }
+    }
 
-            let register = line.split(/\s/)
+    testQuery(line, line_number) {
+        if (!/^QUERY\s(-?[0-9]+\s){5}[0-9]+/.test(line)) {
+            this.error = { line, line_number, error: messages.QUERY_NOT_NUMBERS }
+            return false
+        }
 
-            let x1 = Number(register[1])
-            let y1 = Number(register[2])
-            let z1 = Number(register[3])
-            let x2 = Number(register[4])
-            let y2 = Number(register[5])
-            let z2 = Number(register[6])
+        let register = line.split(/\s/)
 
-            if (x2 < x1) {
-                this.error = { line, line_number, error: messages.QUERY_X1_GREATER_THAN_X2 }
-                return false
-            }
+        let x1 = Number(register[1])
+        let y1 = Number(register[2])
+        let z1 = Number(register[3])
+        let x2 = Number(register[4])
+        let y2 = Number(register[5])
+        let z2 = Number(register[6])
 
-            if (y2 < y1) {
-                this.error = { line, line_number, error: messages.QUERY_Y1_GREATER_THAN_Y2 }
-                return false
-            }
+        if (x2 < x1) {
+            this.error = { line, line_number, error: messages.QUERY_X1_GREATER_THAN_X2 }
+            return false
+        }
 
-            if (z2 < z1) {
-                this.error = { line, line_number, error: messages.QUERY_Z1_GREATER_THAN_Z2 }
-                return false
-            }
+        if (y2 < y1) {
+            this.error = { line, line_number, error: messages.QUERY_Y1_GREATER_THAN_Y2 }
+            return false
+        }
 
-            if ((x1 < 1 || x1 > this.matrix_length)
-                || (y1 < 1 || y1 > this.matrix_length)
-                || (z1 < 1 || z1 > this.matrix_length)
-                || (x2 < 1 || x2 > this.matrix_length)
-                || (y2 < 1 || y2 > this.matrix_length)
-                || (z2 < 1 || z2 > this.matrix_length)) {
+        if (z2 < z1) {
+            this.error = { line, line_number, error: messages.QUERY_Z1_GREATER_THAN_Z2 }
+            return false
+        }
 
-                this.error = { line, line_number, error: messages.QUERY_OUT_BOUNDS }
-                return false
-            }
+        if ((x1 < 1 || x1 > this.matrix_length)
+            || (y1 < 1 || y1 > this.matrix_length)
+            || (z1 < 1 || z1 > this.matrix_length)
+            || (x2 < 1 || x2 > this.matrix_length)
+            || (y2 < 1 || y2 > this.matrix_length)
+            || (z2 < 1 || z2 > this.matrix_length)) {
+            this.error = { line, line_number, error: messages.QUERY_OUT_BOUNDS }
+            return false
+        }
+
+        return true
+    }
+
+    testUpdate(line, line_number) {
+        if (!/^UPDATE\s(-?[0-9]+\s){3}-?[0-9]+/.test(line)) {
+            this.error = { line, line_number, error: messages.UPDATE_NOT_NUMBERS }
+            return false
+        }
+
+        let register = line.split(/\s/)
+        let x = Number(register[1])
+        let y = Number(register[2])
+        let z = Number(register[3])
+        let W = Number(register[4])
+
+        if ((x < 1 || x > this.matrix_length)
+            || (y < 1 || y > this.matrix_length)
+            || (z < 1 || z > this.matrix_length)) {
+
+            this.error = { line, line_number, error: messages.UPDATE_OUT_BOUNDS }
+            return false
+        }
+
+        if (W < Math.pow(-10, 9) || W > Math.pow(10, 9)) {
+            this.error = { line, line_number, error: messages.UPDATE_W_OUT_BOUNDS }
+            return false
         }
 
         return true
