@@ -5,6 +5,7 @@ export default class MatrixController {
     matrix = new Matrix3D()
 
     process(operations) {
+        this.plain_output = ''
         for (let i in operations) {
             let operation = operations[i].split(/\s/)
             let params = operation.slice(1).map(n => Number(n));
@@ -24,6 +25,9 @@ export default class MatrixController {
                         `${this.plain_output}\n${result}`
                     ) : `${result}`
                     break;
+
+                default:
+                    break
             }
         }
         return this.plain_output;
