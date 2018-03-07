@@ -1,7 +1,7 @@
 
 export const messages = {
-    TEST_CASE_NOT_NUMBER: 'Test case debe ser un número',
-    TEST_CASE_OUT_BOUNDS: 'Test debe estar entre 1 y 50',
+    TEST_CASE_NOT_NUMBER: 'T debe ser un número',
+    TEST_CASE_OUT_BOUNDS: 'T debe estar entre 1 y 50',
 
     DEFINITION_NOT_NUMBER: 'Tanto N como M deben ser números',
     DEFINITION_N_OUT_BOUNDS: 'N debe estar entre 1 y 100',
@@ -20,9 +20,9 @@ export const messages = {
     QUERY_Y1_GREATER_THAN_Y2: 'y1 no debe ser menor que y2',
     QUERY_Z1_GREATER_THAN_Z2: 'z1 no debe ser menor que z2',
 
-    TEST_CASE_SUGGESTION: 'T // ej: 2',
-    DEFINITION_SUGGESTION: 'N M // ej: 3 5',
-    OPERATION_SUGGESTION: 'UPDATE x y z W | QUERY x1 y1 z1 x2 y2 z2 // ej: UPDATE 1 1 1 5 | QUERY 1 1 1 2 2 2',
+    TEST_CASE_SUGGESTION: 'T (Test case) // ej: 2',
+    DEFINITION_SUGGESTION: 'N (Elementos en N * N * N) M (Operaciones) // ej: 3 5',
+    OPERATION_SUGGESTION: 'UPDATE x y z W (Valor a asignar) | QUERY x1 y1 z1 x2 y2 z2 // ej: UPDATE 1 1 1 5 | QUERY 1 1 1 2 2 2',
 }
 
 export default class InputValidator {
@@ -60,10 +60,11 @@ export default class InputValidator {
                 if (this.testTestCase(line, i)) {
                     this.suggestion = messages.DEFINITION_SUGGESTION
                 } else {
+                    this.suggestion = messages.TEST_CASE_SUGGESTION
                     return false
                 }
 
-            } else if (this.operation_length == 0) {
+            } else if (this.operation_length === 0) {
                 if (this.testDefinition(line, i)) {
                     this.processDefinition(line)
                 } else {

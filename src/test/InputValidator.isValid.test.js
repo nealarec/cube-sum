@@ -58,6 +58,20 @@ it("isValid with input '5 \n 8 10 \n QUERY 5 5 5 8 8 8' will be true on double c
     expect(validator.isValid()).toBe(true)
 })
 
+it("isValid with input '3 \n 4 5 \n 9 9 9 9' will be false", function () {
+    let validator = new InputValidator;
+    validator.setInput('3 \n 4 5 \n 9 9 9 9')
+
+    expect(validator.isValid()).toBe(false)
+})
+
+it("isValid with input 're' will make a suggestion", function () {
+    let validator = new InputValidator;
+    validator.setInput('re')
+    validator.isValid()
+    expect(validator.suggestion).toBe(messages.TEST_CASE_SUGGESTION)
+})
+
 it("isValid test with sample input will be true", function () {
     let validator = new InputValidator;
     validator.setInput(`2
@@ -91,7 +105,7 @@ it("isValid test will make operations.length be 11", function () {
         QUERY 1 1 1 1 1 1
         QUERY 1 1 1 2 2 2
         QUERY 2 2 2 2 2 2`)
-        
+
     validator.isValid()
 
     expect(validator.operations.length).toBe(11)
