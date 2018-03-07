@@ -64,3 +64,14 @@ pre b {
 button+button {
     margin-left: 1em;
 }
+
+a {
+    padding: 0 0.3em;
+}
+
+.active {
+    color: black !important;
+}
+.active:hover {
+    text-decoration: none;
+}
