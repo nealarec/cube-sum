@@ -1,6 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './styles/index.css';
-import App from './app';
+import React from 'react'
+import { render } from 'react-dom'
+import './styles/index.css'
+import App from './app'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+let root = document.getElementById('root')
+render(<App />, root)
+
+if (module.hot) {
+    module.hot.accept('./app', () => {
+        let NextApp = require('./app').default
+        render(<NextApp />, root)
+    })
+}
